@@ -1,0 +1,27 @@
+{
+  "timestamp_utc": "2026-11-24T19:56:35.726624+00:00",
+  "run_id": "8f8ead03",
+  "target": "http://127.0.0.1:8080",
+  "environment": "Windows; SQLite; proxy Python round-robin; auth + 2 processos de chat",
+  "users_simultaneous": 100,
+  "groups": 20,
+  "rounds": 3,
+  "connections_by_instance": {
+    "chat-2": 50,
+    "chat-1": 50
+  },
+  "messages_sent": 301,
+  "acks": 301,
+  "expected_deliveries": 1502,
+  "deliveries": 1502,
+  "history_verified": true,
+  "latency_ms": {
+    "median": 1489.45,
+    "p95": 2380.39
+  },
+  "login_seconds": 3.673,
+  "messaging_seconds": 2.853,
+  "total_seconds": 12.446,
+  "errors": [],
+  "passed": true
+}

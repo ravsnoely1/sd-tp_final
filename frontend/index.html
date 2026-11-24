@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#142b29"><title>Prosa · Chat distribuído</title>
+  <link rel="stylesheet" href="/static/style.css"><script src="/static/app.js" defer></script>
+</head>
+<body>
+  <main id="login-view" class="entrance">
+    <section class="intro"><span class="eyebrow">SISTEMAS DISTRIBUÍDOS</span><h1>Uma conversa.<br>Muitas conexões.</h1><p>Um lugar para trocar ideias, conversar em equipe e manter todo mundo por perto.</p><div class="wordmark">Prosa<span>●</span></div></section>
+    <section class="auth-panel"><form id="auth-form" class="card">
+      <span class="eyebrow">BEM-VINDO AO PROSA</span><h2 id="auth-title">Bom ter você aqui.</h2><p id="auth-description">Entre para continuar suas conversas.</p>
+      <label for="username">Usuário</label><input id="username" autocomplete="username" pattern="[A-Za-z0-9_]{3,24}" minlength="3" maxlength="24" placeholder="seu_usuario" required>
+      <label for="password">Senha</label><input id="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" placeholder="Pelo menos 8 caracteres" required>
+      <p id="auth-error" class="error" role="alert"></p><button id="auth-submit" class="primary" type="submit">Entrar <span>→</span></button>
+      <button id="toggle-auth" type="button" class="text-button">Primeira vez aqui? Crie sua conta</button>
+    </form><small>Conversas que aproximam.</small></section>
+  </main>
+  <main id="chat-view" class="workspace" hidden>
+    <aside class="sidebar"><header><div class="wordmark">Prosa<span>●</span></div><button id="logout" class="icon-button" title="Sair da conta" aria-label="Sair da conta">↗</button></header>
+      <div class="account"><span id="avatar" class="avatar"></span><div><strong id="current-user"></strong><small id="connection" role="status">Conectando…</small></div><span id="status-dot" class="status-dot"></span></div>
+      <div class="list-heading"><h2>Conversas</h2><button id="new-room" class="icon-button" title="Nova conversa" aria-label="Nova conversa">＋</button></div>
+      <label class="sr-only" for="search">Buscar conversas</label><input id="search" class="search" placeholder="Buscar uma conversa…" type="search">
+      <nav id="rooms" aria-label="Conversas"></nav><footer>Feito para conectar.</footer>
+    </aside>
+    <section class="conversation"><div id="empty-state" class="empty-state"><span class="empty-symbol">↗</span><span class="eyebrow">O PRÓXIMO ASSUNTO COMEÇA AQUI</span><h2>Abra espaço para uma boa conversa.</h2><p>Escolha uma conversa ao lado ou comece uma nova.</p><button id="empty-new" class="primary">Nova conversa <span>＋</span></button></div>
+      <div id="active-room" class="active-room" hidden><header class="room-header"><button id="back" class="icon-button mobile-only" aria-label="Voltar às conversas">←</button><span class="avatar" id="room-avatar"></span><div><h2 id="room-title"></h2><small id="room-members"></small></div></header>
+        <button id="older" class="text-button" hidden>Carregar mensagens anteriores</button><div id="messages" class="messages" role="log" aria-label="Mensagens" aria-live="polite"></div>
+        <form id="message-form" class="composer"><label for="message" class="sr-only">Mensagem</label><textarea id="message" rows="1" maxlength="4000" placeholder="Escreva sua mensagem…" required></textarea><button id="send" class="primary" type="submit" aria-label="Enviar mensagem">Enviar ↑</button></form>
+      </div>
+      <p id="notice" class="notice" role="status" hidden></p>
+    </section>
+  </main>
+  <dialog id="room-dialog"><form id="room-form"><div class="dialog-heading"><h2>Vamos conversar?</h2><button id="close-dialog" type="button" class="icon-button" aria-label="Fechar">×</button></div><p>Escolha quem vai fazer parte.</p>
+    <label for="room-kind">Tipo de conversa</label><select id="room-kind"><option value="direct">Privada · duas pessoas</option><option value="group">Grupo · várias pessoas</option></select>
+    <div id="group-name-wrap" hidden><label for="group-name">Nome do grupo</label><input id="group-name" maxlength="60" placeholder="Ex.: Equipe do trabalho"></div>
+    <fieldset id="people"><legend>Participantes</legend></fieldset><p id="room-error" class="error" role="alert"></p><button type="submit" class="primary">Criar conversa →</button>
+  </form></dialog>
+</body></html>

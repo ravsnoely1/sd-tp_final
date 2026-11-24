@@ -1,0 +1,60 @@
+name: prosa-chat
+x-app: &app
+  build: .
+  restart: unless-stopped
+  environment: &environment
+    DATABASE_URL: postgresql://${POSTGRES_USER:-chat}:${POSTGRES_PASSWORD:?Copie .env.example para .env e configure a senha}@db:5432/${POSTGRES_DB:-chat}
+    AUTH_URL: http://auth:8001
+  depends_on:
+    db:
+      condition: service_healthy
+  healthcheck:
+    test: ["CMD", "python", "-c", "import urllib.request,os; urllib.request.urlopen('http://127.0.0.1:'+os.environ['PORT']+'/health',timeout=3)"]
+    interval: 10s
+    timeout: 5s
+    retries: 5
+    start_period: 15s
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-chat}
+      POSTGRES_USER: ${POSTGRES_USER:-chat}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Configure POSTGRES_PASSWORD no .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+  auth:
+    <<: *app
+    command: ["python", "-m", "chat.auth"]
+    environment:
+      <<: *environment
+      PORT: "8001"
+    deploy:
+      replicas: 2
+  chat:
+    <<: *app
+    environment:
+      <<: *environment
+      PORT: "8002"
+    deploy:
+      replicas: 2
+  gateway:
+    image: nginx:1.28-alpine
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      auth:
+        condition: service_healthy
+      chat:
+        condition: service_healthy
+volumes:
+  postgres_data:
